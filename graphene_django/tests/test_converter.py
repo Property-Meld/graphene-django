@@ -9,8 +9,19 @@ from graphene.relay import ConnectionField, Node
 from graphene.types.datetime import DateTime, Date, Time
 from graphene.types.json import JSONString
 
-from ..compat import JSONField, ArrayField, HStoreField, RangeField, MissingType
-from ..converter import convert_django_field, convert_django_field_with_choices
+from ..compat import (
+    ArrayField,
+    HStoreField,
+    JSONField,
+    PGJSONField,
+    MissingType,
+    RangeField,
+)
+from ..converter import (
+    convert_django_field,
+    convert_django_field_with_choices,
+    generate_enum_name,
+)
 from ..registry import Registry
 from ..types import DjangoObjectType
 from .models import Article, Film, FilmDetails, Reporter
@@ -312,8 +323,13 @@ def test_should_postgres_hstore_convert_string():
     assert_conversion(HStoreField, JSONString)
 
 
-@pytest.mark.skipif(JSONField is MissingType, reason="JSONField should exist")
+@pytest.mark.skipif(PGJSONField is MissingType, reason="PGJSONField should exist")
 def test_should_postgres_json_convert_string():
+    assert_conversion(PGJSONField, JSONString)
+
+
+@pytest.mark.skipif(JSONField is MissingType, reason="JSONField should exist")
+def test_should_json_convert_string():
     assert_conversion(JSONField, JSONString)
 
 
