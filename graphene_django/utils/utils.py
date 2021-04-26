@@ -2,7 +2,7 @@ import inspect
 
 from django.db import models
 from django.db.models.manager import Manager
-from django.utils import six
+import six
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
 
